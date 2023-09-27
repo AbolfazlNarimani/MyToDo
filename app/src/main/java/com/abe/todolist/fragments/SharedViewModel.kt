@@ -11,7 +11,7 @@ import com.abe.todolist.R
 import com.abe.todolist.data.models.Priority
 import com.abe.todolist.data.models.ToDoData
 
-class SharedViewModel(application: Application): AndroidViewModel(application) {
+class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
     /** ============================= List Fragment ============================= */
 
@@ -19,18 +19,38 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
     /** ============================= Add/Update Fragment ============================= */
 
     val listener: AdapterView.OnItemSelectedListener = object :
-        AdapterView.OnItemSelectedListener{
+
+        AdapterView.OnItemSelectedListener {
+
         override fun onNothingSelected(p0: AdapterView<*>?) {}
+
         override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
+            parent: AdapterView<*>?, view: View?, position: Int, id: Long
         ) {
-            when(position){
-                0 -> { (parent?.getChildAt(0) as TextView).setTextColor(ContextCompat.getColor(application, R.color.red)) }
-                1 -> { (parent?.getChildAt(0) as TextView).setTextColor(ContextCompat.getColor(application, R.color.yellow)) }
-                2 -> { (parent?.getChildAt(0) as TextView).setTextColor(ContextCompat.getColor(application, R.color.green)) }
+            when (position) {
+                0 -> {
+                    (parent?.getChildAt(0) as TextView).setTextColor(
+                        ContextCompat.getColor(
+                            application, R.color.red
+                        )
+                    )
+                }
+
+                1 -> {
+                    (parent?.getChildAt(0) as TextView).setTextColor(
+                        ContextCompat.getColor(
+                            application, R.color.yellow
+                        )
+                    )
+                }
+
+                2 -> {
+                    (parent?.getChildAt(0) as TextView).setTextColor(
+                        ContextCompat.getColor(
+                            application, R.color.green
+                        )
+                    )
+                }
             }
         }
     }
@@ -40,10 +60,19 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun parsePriority(priority: String): Priority {
-        return when(priority){
-            "High Priority" -> { Priority.HIGH }
-            "Medium Priority" -> { Priority.MEDIUM }
-            "Low Priority" -> { Priority.LOW }
+        return when (priority) {
+            "High Priority" -> {
+                Priority.HIGH
+            }
+
+            "Medium Priority" -> {
+                Priority.MEDIUM
+            }
+
+            "Low Priority" -> {
+                Priority.LOW
+            }
+
             else -> Priority.LOW
         }
     }

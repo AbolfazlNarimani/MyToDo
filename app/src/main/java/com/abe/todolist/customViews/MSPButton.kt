@@ -1,4 +1,4 @@
-package com.example.todolist.customViews
+package com.abe.todolist.customViews
 
 import android.content.Context
 import android.graphics.Typeface
@@ -13,7 +13,7 @@ class MSPButton (context: Context, attrs: AttributeSet): AppCompatButton(context
     private fun applyFont() {
 
         val typeface: Typeface =
-            Typeface.createFromAsset(context.assets, "gothamblack.otf")
+            Typeface.createFromAsset(context.assets, "Montserrat-Bold.ttf")
         setTypeface(typeface)
     }
 }

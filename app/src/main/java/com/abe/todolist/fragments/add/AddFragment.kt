@@ -41,8 +41,12 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val menuHost: MenuHost = requireActivity()
 
+
+        binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
+
+        // implement menu
+        val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.add_fragment_menu, menu)
@@ -65,12 +69,12 @@ class AddFragment : Fragment() {
         val mPriority = binding.prioritiesSpinner.selectedItem.toString()
         val mDescription = binding.descriptionEt.text.toString()
 
-        if (validated(mTitle, mDescription)){
+        if (mSharedViewModel.verifyDataFromUser(mTitle, mDescription)){
             // insert data to db
             val newData = ToDoData(
                 id = 0,
                 title = mTitle,
-                priority = parsePriority(mPriority),
+                priority = mSharedViewModel.parsePriority(mPriority),
                 description = mDescription
             )
             mToDoViewModel.insertData(newData)
@@ -80,21 +84,7 @@ class AddFragment : Fragment() {
         }else Toast.makeText(requireContext(),"fill all the fields", Toast.LENGTH_SHORT).show()
     }
 
-    private fun parsePriority(priority: String): Priority {
-        return when(priority){
-            "High Priority" -> Priority.HIGH
-            "Medium Priority" -> Priority.MEDIUM
-            "Low Priority" -> Priority.LOW
-            else -> Priority.LOW
-        }
-    }
 
-    private fun validated(mTitle:String,mDescription:String): Boolean {
-       return if (TextUtils.isEmpty(mTitle) || TextUtils.isEmpty(mDescription)){
-
-            false
-        } else !(mTitle.isEmpty() || mDescription.isEmpty())
-    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.todolist.customViews
+package com.abe.todolist.customViews
 
 import android.content.Context
 import android.graphics.Typeface
@@ -15,7 +15,7 @@ class TDMultiLine  (context: Context, attrs: AttributeSet): AppCompatEditText(co
     private fun applyFont() {
 
         val typeface: Typeface =
-            Typeface.createFromAsset(context.assets, "robotoregular.ttf")
+            Typeface.createFromAsset(context.assets, "Montserrat-Bold.ttf")
         setTypeface(typeface)
     }
 }

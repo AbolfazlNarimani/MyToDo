@@ -3,66 +3,120 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="24dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/current_title_container"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_a_title"
+        android:textColorHint="@color/colorSecondaryText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.abe.todolist.customViews.TDMultiLine
+            android:id="@+id/current_title_et"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:inputType="text"
+            android:padding="@dimen/et_padding"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/et_textSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Spinner
+        android:id="@+id/current_priorities_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/priorities"
+        app:layout_constraintBottom_toTopOf="@id/current_task_entery_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_title_container" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/current_task_entery_container"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="24dp"
+        android:layout_marginTop="32dp"
+        android:hint="@string/write_your_task_here"
+        android:textColorHint="@color/colorSecondaryText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:context=".fragments.update.UpdateFragment">
+        app:layout_constraintTop_toBottomOf="@id/current_priorities_spinner">
 
-        <EditText
-            android:id="@+id/current_title_et"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:background="@drawable/custom_input"
-            android:ems="10"
-            android:hint="@string/title"
-            android:inputType="textPersonName"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Spinner
-            android:id="@+id/current_priorities_spinner"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/custom_input"
-            android:entries="@array/priorities"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_title_et" />
-
-        <EditText
+        <com.abe.todolist.customViews.TDMultiLine
             android:id="@+id/current_description_et"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/custom_input"
-            android:ems="10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="top|start"
-            android:hint="@string/description"
             android:inputType="textMultiLine"
-            android:paddingStart="24dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_priorities_spinner" />
+            android:padding="@dimen/et_padding"
+            android:textSize="@dimen/et_textSize" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/current_date_time_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/current_task_entery_container"
+        app:layout_constraintTop_toBottomOf="@+id/current_priorities_spinner"
+        tools:layout_editor_absoluteX="24dp">
+
+        <ImageButton
+            android:id="@+id/current_time_btn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:contentDescription="@string/set_time"
+            android:src="@drawable/time"
+            android:text="@string/time"
+            app:tint="#777" />
+
+        <com.abe.todolist.customViews.MSPTextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="@string/date"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/current_date_btn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="120dp"
+            android:clickable="true"
+            android:contentDescription="@string/set_date"
+            android:src="@drawable/date"
+            android:text="@string/date"
+            app:tint="#777" />
+
+        <com.abe.todolist.customViews.MSPTextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="@string/time"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
