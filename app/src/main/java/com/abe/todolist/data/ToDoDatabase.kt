@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.abe.todolist.data.models.ToDoData
 
-@Database(entities = [ToDoData::class], version = 1, exportSchema = false)
+@Database(entities = [ToDoData::class], version = 3, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ToDoDatabase : RoomDatabase() {
 
@@ -48,7 +48,8 @@ abstract class ToDoDatabase : RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 ToDoDatabase::class.java, "todo_database"
-            ).build()
+
+            ).fallbackToDestructiveMigration().build()
     }
 
 }

@@ -6,12 +6,11 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import com.abe.todolist.R
 import com.abe.todolist.data.models.Priority
-import com.abe.todolist.data.models.ToDoData
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
+
 
     /** ============================= List Fragment ============================= */
 
@@ -55,8 +54,8 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun verifyDataFromUser(title: String, description: String): Boolean {
-        return !(title.isEmpty() || description.isEmpty())
+    fun verifyDataFromUser(title: String, description: String, userDate: String, userTime: String): Boolean {
+        return !(title.isEmpty() || description.isEmpty() || userDate.isEmpty() || userTime.isEmpty())
     }
 
     fun parsePriority(priority: String): Priority {
@@ -76,5 +75,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             else -> Priority.LOW
         }
     }
+
+
 
 }

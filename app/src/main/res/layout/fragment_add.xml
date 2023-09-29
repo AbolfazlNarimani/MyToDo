@@ -88,6 +88,16 @@
             android:src="@drawable/time"
             android:text="@string/time"
             app:tint="#777" />
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/selectedTime"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="date"
+            />
+
 
         <ImageButton
             android:id="@+id/date_btn"
@@ -100,6 +110,15 @@
             android:src="@drawable/date"
             android:text="@string/date"
             app:tint="#777" />
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/selectedDate"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="date"
+            />
 
     </LinearLayout>
 

@@ -13,7 +13,7 @@ class MSPTextView(context: Context, attrs: AttributeSet): AppCompatTextView(cont
     private fun applyFont() {
 
         val typeface: Typeface =
-            Typeface.createFromAsset(context.assets, "Montserrat-Regular.ttf")
+            Typeface.createFromAsset(context.assets, "Montserrat-Bold.ttf")
         setTypeface(typeface)
     }
 }
