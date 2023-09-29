@@ -64,4 +64,6 @@ dependencies {
     kapt("androidx.room:room-compiler:2.4.2")
     implementation("androidx.room:room-ktx:2.4.2")
     androidTestImplementation("androidx.room:room-testing:2.4.2")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.2")
 }

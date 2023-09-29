@@ -29,20 +29,19 @@ import com.abe.todolist.data.models.ToDoData
 import com.abe.todolist.data.viewmodel.ToDoViewModel
 import com.abe.todolist.databinding.FragmentAddBinding
 import com.abe.todolist.fragments.DatePickerFragment
-import com.abe.todolist.interfacepack.DateSelected
 import com.abe.todolist.interfacepack.TimeSelected
 import com.abe.todolist.notifications.CHANNELID
 import com.abe.todolist.notifications.MESSEAGEEXTRA
 import com.abe.todolist.notifications.NOTIFICATIONID
 import com.abe.todolist.notifications.Notifications
 import com.abe.todolist.notifications.TITLEEXTRA
-import com.example.todoapp.fragments.SharedViewModel
+import com.abe.todolist.fragments.SharedViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class AddFragment : Fragment(), DateSelected, TimeSelected {
+class AddFragment : Fragment(), TimeSelected {
 
     private lateinit var binding: FragmentAddBinding
     private val mToDoViewModel: ToDoViewModel by viewModels()
@@ -101,13 +100,14 @@ class AddFragment : Fragment(), DateSelected, TimeSelected {
         intent.putExtra(TITLEEXTRA, title)
         intent.putExtra(MESSEAGEEXTRA, message)
 
-        val pendingIntent = PendingIntent.getBroadcast(requireContext().applicationContext,
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext().applicationContext,
             NOTIFICATIONID,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as  AlarmManager
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val time = getTime()
         alarmManager.setAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
@@ -115,21 +115,26 @@ class AddFragment : Fragment(), DateSelected, TimeSelected {
             pendingIntent
         )
     }
-    var hour = 0
-    var minute = 0
-    var dayOfMonth = 0
-    var month = 0
-    var year = 0
+
+    private var hour = 0
+    private var minute = 0
+    private var dayOfMonth = 0
+    private var month = 0
+    private var year = 0
     private fun getTime(): Long {
         val calendar = Calendar.getInstance()
-        calendar.set(this.year,this.month,this.dayOfMonth,this.hour,(this.minute - 1))
+        calendar.set(/* year = */ this.year,/* month = */
+            this.month,/* date = */
+            this.dayOfMonth,/* hourOfDay = */
+            this.hour,/* minute = */
+            (this.minute - 1)
+        )
         return calendar.timeInMillis
     }
 
 
-
     private fun createNotificationChannel() {
-        val name = "Notif Channel"
+        val name = "Notify Channel"
         val description = "A Description of the channel"
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(CHANNELID, name, importance)
@@ -140,8 +145,20 @@ class AddFragment : Fragment(), DateSelected, TimeSelected {
     }
 
     private fun showDatePicker() {
-        val datePickerFragment = DatePickerFragment(this)
+        val datePickerFragment = DatePickerFragment(mSharedViewModel)
         datePickerFragment.show(parentFragmentManager, "datePicker")
+        setDate()
+    }
+
+    private fun setDate() {
+        mSharedViewModel.observeDateReceiver().observe(viewLifecycleOwner) { date ->
+
+            binding.selectedDate.text = date
+            userDate = date
+            binding.selectedDate.visibility = View.VISIBLE
+
+        }
+
     }
 
     private fun showTimePicker() {
@@ -177,22 +194,7 @@ class AddFragment : Fragment(), DateSelected, TimeSelected {
     }
 
     // this is the fun that will be invoked after user picked a date
-    override fun receiveDate(year: Int, month: Int, dayOfMonth: Int) {
-        val calender = GregorianCalendar()
-        calender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        calender.set(Calendar.MONTH, month)
-        calender.set(Calendar.YEAR, year)
-        val viewFormatter = SimpleDateFormat("dd-MM-YYYY")
-        val viewFormattedDate = viewFormatter.format(calender.time)
-        binding.selectedDate.text = viewFormattedDate
-        userDate = viewFormattedDate
-        binding.selectedDate.visibility = View.VISIBLE
 
-        this.dayOfMonth = dayOfMonth
-        this.month = month
-        this.year = year
-
-    }
 
     override fun receiveTime(hour: Int, minute: Int) {
         /*userTime = "$hour : $minute"
@@ -205,8 +207,6 @@ class AddFragment : Fragment(), DateSelected, TimeSelected {
         binding.selectedTime.text = viewFormattedTime
         userTime = viewFormattedTime
         binding.selectedTime.visibility = View.VISIBLE
-
-
 
         this.hour = hour
         this.minute = minute
