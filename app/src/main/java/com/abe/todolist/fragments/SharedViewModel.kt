@@ -18,60 +18,6 @@ import java.util.GregorianCalendar
 class SharedViewModel(application: Application) : AndroidViewModel(application), DateSelected,
     TimeSelected {
 
-    private var _datePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
-    private val _timePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
-
-
-    override fun receiveDate(year: Int, month: Int, dayOfMonth: Int) {
-        val calender = GregorianCalendar()
-        calender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        calender.set(Calendar.MONTH, month)
-        calender.set(Calendar.YEAR, year)
-        val viewFormatter = SimpleDateFormat("dd-MM-YYYY")
-        val viewFormattedDate = viewFormatter.format(calender.time)
-        _datePickerLiveData.postValue(viewFormattedDate)
-
-        this.year = year
-        this.month = month
-        this.dayOfMonth = dayOfMonth
-    }
-
-    override fun receiveTime(hour: Int, minute: Int) {
-        /*userTime = "$hour : $minute"
-        binding.selectedDate.text = userTime*/
-        val calender = GregorianCalendar()
-        calender.set(Calendar.HOUR_OF_DAY, hour)
-        calender.set(Calendar.MINUTE, minute)
-        val viewFormat = SimpleDateFormat("mm:hh")
-        val viewFormattedTime = viewFormat.format(calender.time)
-        _timePickerLiveData.postValue(viewFormattedTime)
-
-        this.hour = hour
-        this.minute = minute
-    }
-
-    fun observeDateReceiver(): MutableLiveData<String> {
-        return _datePickerLiveData
-    }
-    fun observeTimeReceiver(): MutableLiveData<String>{
-        return _timePickerLiveData
-    }
-
-    private var hour = 0
-    private var minute = 0
-    private var dayOfMonth = 0
-    private var month = 0
-    private var year = 0
-     fun getTime(): Long {
-        val calendar = Calendar.getInstance()
-        calendar.set(/* year = */ this.year,/* month = */
-            this.month,/* date = */
-            this.dayOfMonth,/* hourOfDay = */
-            this.hour,/* minute = */
-            (this.minute - 1)
-        )
-        return calendar.timeInMillis
-    }
 
     /** ============================= List Fragment ============================= */
 
@@ -124,6 +70,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
         return !(title.isEmpty() || description.isEmpty() || userDate.isEmpty() || userTime.isEmpty())
     }
 
+    // here we parse Priorities from String to a Priority Object that can be stored in  DataBase via Room Converter class
+    /**
+     * now [TimeSelected]
+     */
     fun parsePriority(priority: String): Priority {
         return when (priority) {
             "High Priority" -> {
@@ -140,6 +90,67 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
 
             else -> Priority.LOW
         }
+    }
+
+    // Live Data .....
+    private var _datePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
+    private val _timePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
+
+
+    // Receiving Date and Time from DatePickerFragment and TimePickerFragment from Interface TimeSelected and DateSelected
+    override fun receiveDate(year: Int, month: Int, dayOfMonth: Int) {
+        val calender = GregorianCalendar()
+        calender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        calender.set(Calendar.MONTH, month)
+        calender.set(Calendar.YEAR, year)
+        val viewFormatter = SimpleDateFormat("dd-MM-YYYY")
+        val viewFormattedDate = viewFormatter.format(calender.time)
+        _datePickerLiveData.postValue(viewFormattedDate)
+
+        this.year = year
+        this.month = month
+        this.dayOfMonth = dayOfMonth
+    }
+
+    override fun receiveTime(hour: Int, minute: Int) {
+        /*userTime = "$hour : $minute"
+        binding.selectedDate.text = userTime*/
+        val calender = GregorianCalendar()
+        calender.set(Calendar.HOUR_OF_DAY, hour)
+        calender.set(Calendar.MINUTE, minute)
+        val viewFormat = SimpleDateFormat("mm:hh")
+        val viewFormattedTime = viewFormat.format(calender.time)
+        _timePickerLiveData.postValue(viewFormattedTime)
+
+        this.hour = hour
+        this.minute = minute
+    }
+
+
+    // observers DAAAA
+    fun observeDateReceiver(): MutableLiveData<String> {
+        return _datePickerLiveData
+    }
+
+    fun observeTimeReceiver(): MutableLiveData<String> {
+        return _timePickerLiveData
+    }
+
+    // get and set time for alarm system BLYAD
+    private var hour = 0
+    private var minute = 0
+    private var dayOfMonth = 0
+    private var month = 0
+    private var year = 0
+    fun getTime(): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(/* year = */ this.year,/* month = */
+            this.month,/* date = */
+            this.dayOfMonth,/* hourOfDay = */
+            this.hour,/* minute = */
+            (this.minute - 1)
+        )
+        return calendar.timeInMillis
     }
 
 
