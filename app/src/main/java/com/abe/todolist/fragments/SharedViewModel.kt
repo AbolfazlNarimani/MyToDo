@@ -30,6 +30,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
         val viewFormatter = SimpleDateFormat("dd-MM-YYYY")
         val viewFormattedDate = viewFormatter.format(calender.time)
         _datePickerLiveData.postValue(viewFormattedDate)
+
+        this.year = year
+        this.month = month
+        this.dayOfMonth = dayOfMonth
     }
 
     override fun receiveTime(hour: Int, minute: Int) {
@@ -40,9 +44,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
         calender.set(Calendar.MINUTE, minute)
         val viewFormat = SimpleDateFormat("mm:hh")
         val viewFormattedTime = viewFormat.format(calender.time)
-
         _timePickerLiveData.postValue(viewFormattedTime)
 
+        this.hour = hour
+        this.minute = minute
     }
 
     fun observeDateReceiver(): MutableLiveData<String> {
@@ -50,6 +55,22 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
     }
     fun observeTimeReceiver(): MutableLiveData<String>{
         return _timePickerLiveData
+    }
+
+    private var hour = 0
+    private var minute = 0
+    private var dayOfMonth = 0
+    private var month = 0
+    private var year = 0
+     fun getTime(): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(/* year = */ this.year,/* month = */
+            this.month,/* date = */
+            this.dayOfMonth,/* hourOfDay = */
+            this.hour,/* minute = */
+            (this.minute - 1)
+        )
+        return calendar.timeInMillis
     }
 
     /** ============================= List Fragment ============================= */

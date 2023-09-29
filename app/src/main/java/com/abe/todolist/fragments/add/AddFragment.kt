@@ -108,7 +108,7 @@ class AddFragment : Fragment() {
         )
 
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val time = getTime()
+        val time = mSharedViewModel.getTime()
         alarmManager.setAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             time,
@@ -116,21 +116,6 @@ class AddFragment : Fragment() {
         )
     }
 
-    private var hour = 0
-    private var minute = 0
-    private var dayOfMonth = 0
-    private var month = 0
-    private var year = 0
-    private fun getTime(): Long {
-        val calendar = Calendar.getInstance()
-        calendar.set(/* year = */ this.year,/* month = */
-            this.month,/* date = */
-            this.dayOfMonth,/* hourOfDay = */
-            this.hour,/* minute = */
-            (this.minute - 1)
-        )
-        return calendar.timeInMillis
-    }
 
 
     private fun createNotificationChannel() {
