@@ -41,7 +41,7 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 
-class AddFragment : Fragment(), TimeSelected {
+class AddFragment : Fragment() {
 
     private lateinit var binding: FragmentAddBinding
     private val mToDoViewModel: ToDoViewModel by viewModels()
@@ -144,10 +144,29 @@ class AddFragment : Fragment(), TimeSelected {
         notificationManager.createNotificationChannel(channel)
     }
 
+
+    // showing time picker and date picker to user
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment(mSharedViewModel)
         datePickerFragment.show(parentFragmentManager, "datePicker")
         setDate()
+    }
+
+    private fun showTimePicker() {
+        val timePickerFragment = TimePickerFragment(mSharedViewModel)
+        timePickerFragment.show(parentFragmentManager, "timePicker")
+        setTime()
+    }
+
+    // set time picker and date picker values
+    private fun setTime() {
+        mSharedViewModel.observeTimeReceiver().observe(viewLifecycleOwner) { time ->
+
+            binding.selectedTime.text = time
+            userTime = time
+            binding.selectedTime.visibility = View.VISIBLE
+
+        }
     }
 
     private fun setDate() {
@@ -159,11 +178,6 @@ class AddFragment : Fragment(), TimeSelected {
 
         }
 
-    }
-
-    private fun showTimePicker() {
-        val timePickerFragment = TimePickerFragment(this)
-        timePickerFragment.show(parentFragmentManager, "timePicker")
     }
 
     private fun insertDataToDB() {
@@ -194,23 +208,6 @@ class AddFragment : Fragment(), TimeSelected {
     }
 
     // this is the fun that will be invoked after user picked a date
-
-
-    override fun receiveTime(hour: Int, minute: Int) {
-        /*userTime = "$hour : $minute"
-        binding.selectedDate.text = userTime*/
-        val calender = GregorianCalendar()
-        calender.set(Calendar.HOUR_OF_DAY, hour)
-        calender.set(Calendar.MINUTE, minute)
-        val viewFormat = SimpleDateFormat("mm:hh")
-        val viewFormattedTime = viewFormat.format(calender.time)
-        binding.selectedTime.text = viewFormattedTime
-        userTime = viewFormattedTime
-        binding.selectedTime.visibility = View.VISIBLE
-
-        this.hour = hour
-        this.minute = minute
-    }
 
 
 }

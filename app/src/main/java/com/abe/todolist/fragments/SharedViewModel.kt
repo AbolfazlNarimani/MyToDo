@@ -10,14 +10,16 @@ import androidx.lifecycle.MutableLiveData
 import com.abe.todolist.R
 import com.abe.todolist.data.models.Priority
 import com.abe.todolist.interfacepack.DateSelected
+import com.abe.todolist.interfacepack.TimeSelected
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-class SharedViewModel(application: Application) : AndroidViewModel(application) , DateSelected {
+class SharedViewModel(application: Application) : AndroidViewModel(application), DateSelected,
+    TimeSelected {
 
-    private var _datePickerLiveData : MutableLiveData<String> = MutableLiveData<String>()
-    val datePickerLiveData = _datePickerLiveData
+    private var _datePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
+    private val _timePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
 
 
     override fun receiveDate(year: Int, month: Int, dayOfMonth: Int) {
@@ -30,8 +32,24 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         _datePickerLiveData.postValue(viewFormattedDate)
     }
 
-    fun observeDateReceiver():MutableLiveData<String> {
-        return datePickerLiveData
+    override fun receiveTime(hour: Int, minute: Int) {
+        /*userTime = "$hour : $minute"
+        binding.selectedDate.text = userTime*/
+        val calender = GregorianCalendar()
+        calender.set(Calendar.HOUR_OF_DAY, hour)
+        calender.set(Calendar.MINUTE, minute)
+        val viewFormat = SimpleDateFormat("mm:hh")
+        val viewFormattedTime = viewFormat.format(calender.time)
+
+        _timePickerLiveData.postValue(viewFormattedTime)
+
+    }
+
+    fun observeDateReceiver(): MutableLiveData<String> {
+        return _datePickerLiveData
+    }
+    fun observeTimeReceiver(): MutableLiveData<String>{
+        return _timePickerLiveData
     }
 
     /** ============================= List Fragment ============================= */
@@ -76,7 +94,12 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun verifyDataFromUser(title: String, description: String, userDate: String, userTime: String): Boolean {
+    fun verifyDataFromUser(
+        title: String,
+        description: String,
+        userDate: String,
+        userTime: String
+    ): Boolean {
         return !(title.isEmpty() || description.isEmpty() || userDate.isEmpty() || userTime.isEmpty())
     }
 
@@ -97,7 +120,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             else -> Priority.LOW
         }
     }
-
 
 
 }
