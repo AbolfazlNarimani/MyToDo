@@ -18,5 +18,8 @@ interface ToDoDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
      fun insertData(toDoData: ToDoData)
 
+     @Update
+     suspend fun updateData(toDoData: ToDoData)
+
 
 }

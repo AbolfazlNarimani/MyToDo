@@ -100,6 +100,14 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
         )
         return priorityMap[priority] ?: Priority.LOW
     }
+    fun parsePriorityToInt(priority: Priority): Int {
+        return when (priority) {
+            Priority.HIGH -> 0
+            Priority.MEDIUM -> 1
+            Priority.LOW -> 2
+        }
+    }
+
 
     // Live Data .....
     private var _datePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
@@ -115,7 +123,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
         calender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         calender.set(Calendar.MONTH, month)
         calender.set(Calendar.YEAR, year)
-        val viewFormatter = SimpleDateFormat("dd-MM-YYYY")
+        val viewFormatter = SimpleDateFormat.getDateInstance()
         val viewFormattedDate = viewFormatter.format(calender.time)
         _datePickerLiveData.postValue(viewFormattedDate)
 
@@ -130,7 +138,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
         val calender = GregorianCalendar()
         calender.set(Calendar.HOUR_OF_DAY, hour)
         calender.set(Calendar.MINUTE, minute)
-        val viewFormat = SimpleDateFormat("mm:hh")
+        val viewFormat = SimpleDateFormat.getTimeInstance()
         val viewFormattedTime = viewFormat.format(calender.time)
         _timePickerLiveData.postValue(viewFormattedTime)
 

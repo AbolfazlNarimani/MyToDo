@@ -56,9 +56,20 @@ class AddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpMenu()
 
         binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.onItemSelectedListener
+        // date picker
+        binding.dateBtn.setOnClickListener {
+            showDatePicker()
+        }
+        binding.timeBtn.setOnClickListener {
+            showTimePicker()
+        }
+        createNotificationChannel()
+    }
 
+    private fun setUpMenu() {
         // implement menu
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -77,16 +88,6 @@ class AddFragment : Fragment() {
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-
-        // date picker
-        binding.dateBtn.setOnClickListener {
-            showDatePicker()
-        }
-        binding.timeBtn.setOnClickListener {
-            showTimePicker()
-        }
-        createNotificationChannel()
     }
 
     private fun scheduleNotification() {

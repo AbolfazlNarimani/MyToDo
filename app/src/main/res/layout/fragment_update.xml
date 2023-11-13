@@ -64,7 +64,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/date_time_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,6 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/current_priorities_spinner">
 
+
         <ImageButton
             android:id="@+id/time_btn"
             style="?android:attr/buttonBarButtonStyle"
@@ -84,27 +85,39 @@
             android:contentDescription="@string/set_time"
             android:src="@drawable/time"
             android:text="@string/time"
-            app:tint="#777" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:tint="#777"
+            tools:layout_editor_absoluteX="0dp" />
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="9dp"
             android:text="@string/time"
-            android:textSize="18sp" />
-
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/time_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/date_btn"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="120dp"
+            android:layout_marginTop="1dp"
             android:clickable="true"
             android:contentDescription="@string/set_date"
             android:src="@drawable/date"
             android:text="@string/date"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:tint="#777" />
 
         <TextView
@@ -112,9 +125,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
             android:text="@string/date"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/date_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

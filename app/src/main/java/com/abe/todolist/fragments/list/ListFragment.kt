@@ -29,15 +29,16 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentListBinding.inflate(layoutInflater)
-        return binding.root
+        this.binding = FragmentListBinding.inflate(inflater)
+
+        return this.binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.floatingActionButton.setOnClickListener {
+        this.binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
@@ -64,22 +65,22 @@ class ListFragment : Fragment() {
     }
 
 
-    private fun populateRv() {
+    fun populateRv() {
         mToDoViewModel.getAllData.observe(viewLifecycleOwner) { data ->
 
             if (data.isNotEmpty()) {
                 adapter.differ.submitList(data)
             } else {
-                binding.noDataImageView.visibility = View.VISIBLE
-                binding.noDataTextView.visibility = View.VISIBLE
-                binding.noDataGuide.visibility = View.VISIBLE
-                binding.noDataGuideArrow.visibility = View.VISIBLE
+                this.binding.noDataImageView.visibility = View.VISIBLE
+                this.binding.noDataTextView.visibility = View.VISIBLE
+                this.binding.noDataGuide.visibility = View.VISIBLE
+                this.binding.noDataGuideArrow.visibility = View.VISIBLE
             }
         }
     }
 
     private fun setUpRv() {
-        recyclerView = binding.recyclerView
+        recyclerView = this.binding.recyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         populateRv()
