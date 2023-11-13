@@ -6,6 +6,7 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.abe.todolist.R
 import com.abe.todolist.data.models.Priority
@@ -24,18 +25,18 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
 
     /** ============================= Add/Update Fragment ============================= */
 
-    val listener: AdapterView.OnItemSelectedListener = object :
+    val onItemSelectedListener: AdapterView.OnItemSelectedListener = object :
 
         AdapterView.OnItemSelectedListener {
 
-        override fun onNothingSelected(p0: AdapterView<*>?) {}
+        override fun onNothingSelected(selectedItemPosition: AdapterView<*>?) {}
 
         override fun onItemSelected(
-            parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            spinner: AdapterView<*>?, selectedView: View?, position: Int, id: Long
         ) {
             when (position) {
                 0 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (spinner?.getChildAt(0) as TextView).setTextColor(
                         ContextCompat.getColor(
                             application, R.color.red
                         )
@@ -43,7 +44,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
                 }
 
                 1 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (spinner?.getChildAt(0) as TextView).setTextColor(
                         ContextCompat.getColor(
                             application, R.color.yellow
                         )
@@ -51,7 +52,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
                 }
 
                 2 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (spinner?.getChildAt(0) as TextView).setTextColor(
                         ContextCompat.getColor(
                             application, R.color.green
                         )
@@ -67,14 +68,14 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
         userDate: String,
         userTime: String
     ): Boolean {
-        return !(title.isEmpty() || description.isEmpty() || userDate.isEmpty() || userTime.isEmpty())
+        return !(title.isEmpty() || description.isEmpty() || userDate.isEmpty() || userTime.isEmpty()) //!(title.isEmpty() || description.isEmpty() || userDate.isEmpty() || userTime.isEmpty())
     }
 
     // here we parse Priorities from String to a Priority Object that can be stored in  DataBase via Room Converter class
     /**
      * now [TimeSelected]
      */
-    fun parsePriority(priority: String): Priority {
+    /*fun parsePriority(priority: String): Priority {
         return when (priority) {
             "High Priority" -> {
                 Priority.HIGH
@@ -90,11 +91,22 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
 
             else -> Priority.LOW
         }
+    }*/
+    fun parsePriority(priority: String): Priority {
+        val priorityMap = mapOf(
+            "High Priority" to Priority.HIGH,
+            "Medium Priority" to Priority.MEDIUM,
+            "Low Priority" to Priority.LOW
+        )
+        return priorityMap[priority] ?: Priority.LOW
     }
 
     // Live Data .....
     private var _datePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
     private val _timePickerLiveData: MutableLiveData<String> = MutableLiveData<String>()
+
+    val datePickerLiveData: LiveData<String> get() = _datePickerLiveData
+    val timePickerLiveData: LiveData<String> get() = _timePickerLiveData
 
 
     // Receiving Date and Time from DatePickerFragment and TimePickerFragment from Interface TimeSelected and DateSelected

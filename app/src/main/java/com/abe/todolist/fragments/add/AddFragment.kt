@@ -29,16 +29,12 @@ import com.abe.todolist.data.models.ToDoData
 import com.abe.todolist.data.viewmodel.ToDoViewModel
 import com.abe.todolist.databinding.FragmentAddBinding
 import com.abe.todolist.fragments.DatePickerFragment
-import com.abe.todolist.interfacepack.TimeSelected
 import com.abe.todolist.notifications.CHANNELID
 import com.abe.todolist.notifications.MESSEAGEEXTRA
 import com.abe.todolist.notifications.NOTIFICATIONID
 import com.abe.todolist.notifications.Notifications
 import com.abe.todolist.notifications.TITLEEXTRA
 import com.abe.todolist.fragments.SharedViewModel
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.GregorianCalendar
 
 
 class AddFragment : Fragment() {
@@ -61,7 +57,7 @@ class AddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
+        binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.onItemSelectedListener
 
         // implement menu
         val menuHost: MenuHost = requireActivity()

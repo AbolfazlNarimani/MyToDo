@@ -25,9 +25,10 @@
             android:paddingTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
@@ -43,29 +44,53 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
-            android:id="@+id/no_data_imageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_no_data"
             android:visibility="invisible"
+            android:id="@+id/no_data_imageView"
+            android:layout_width="314dp"
+            android:layout_height="358dp"
+            android:src="@drawable/gg"
+
             app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="@+id/recyclerView"
             app:layout_constraintTop_toTopOf="@+id/recyclerView"
-            app:layout_constraintVertical_bias="0.37" />
+            app:layout_constraintVertical_bias="0.243" />
 
-        <TextView
+        <com.abe.todolist.customViews.MSPTextView
+            android:visibility="invisible"
             android:id="@+id/no_data_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="396dp"
             android:alpha="0.5"
             android:text="@string/no_data"
             android:textSize="16sp"
-            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/recyclerView"
-            app:layout_constraintTop_toBottomOf="@+id/no_data_imageView" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.abe.todolist.customViews.MSPTextView
+            android:visibility="invisible"
+            android:id="@+id/no_data_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="44dp"
+            android:text="@string/click_here_to_begin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/no_data_guide_arrow"
+            android:layout_width="22dp"
+            android:layout_height="19dp"
+            android:layout_marginBottom="44dp"
+            android:src="@drawable/arrow"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/no_data_guide" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

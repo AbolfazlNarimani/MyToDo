@@ -56,5 +56,8 @@
             app:exitAnim="@anim/to_left"
             app:popUpTo="@id/listFragment"
             app:popUpToInclusive="true"/>
+        <argument
+            android:name="currentitem"
+            app:argType="com.abe.todolist.data.models.ToDoData" />
     </fragment>
 </navigation>

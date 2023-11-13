@@ -23,7 +23,6 @@
             android:layout_height="60dp"
             android:inputType="text"
             android:padding="@dimen/et_padding"
-            android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/et_textSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,18 +65,18 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
-        android:id="@+id/current_date_time_btn"
+        android:id="@+id/date_time_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="68dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/current_task_entery_container"
-        app:layout_constraintTop_toBottomOf="@+id/current_priorities_spinner"
-        tools:layout_editor_absoluteX="24dp">
+        app:layout_constraintBottom_toTopOf="@+id/current_task_entery_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/current_priorities_spinner">
 
         <ImageButton
-            android:id="@+id/current_time_btn"
+            android:id="@+id/time_btn"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -87,17 +86,17 @@
             android:text="@string/time"
             app:tint="#777" />
 
-        <com.abe.todolist.customViews.MSPTextView
-            android:id="@+id/tv_date"
+        <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="@string/date"
-            android:visibility="invisible" />
+            android:text="@string/time"
+            android:textSize="18sp" />
+
 
         <ImageButton
-            android:id="@+id/current_date_btn"
+            android:id="@+id/date_btn"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -108,14 +107,13 @@
             android:text="@string/date"
             app:tint="#777" />
 
-        <com.abe.todolist.customViews.MSPTextView
-            android:id="@+id/tv_time"
+        <TextView
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="@string/time"
-            android:visibility="invisible" />
+            android:text="@string/date"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

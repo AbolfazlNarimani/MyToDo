@@ -25,7 +25,6 @@
             android:layout_height="60dp"
             android:inputType="text"
             android:padding="@dimen/et_padding"
-            android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/et_textSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,7 +94,7 @@
             android:layout_gravity="center"
             android:textSize="18sp"
             android:layout_height="wrap_content"
-            android:text="date"
+            android:text="@string/time"
             />
 
 
@@ -117,7 +116,7 @@
             android:layout_gravity="center"
             android:textSize="18sp"
             android:layout_height="wrap_content"
-            android:text="date"
+            android:text="@string/date"
             />
 
     </LinearLayout>

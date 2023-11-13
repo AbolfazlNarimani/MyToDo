@@ -1,13 +1,20 @@
 package com.abe.todolist.fragments.list
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.abe.todolist.R
 import com.abe.todolist.data.viewmodel.ToDoViewModel
 import com.abe.todolist.databinding.FragmentListBinding
@@ -16,14 +23,14 @@ class ListFragment : Fragment() {
 
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private lateinit var binding: FragmentListBinding
-
+    private lateinit var recyclerView: RecyclerView
+    private val adapter: ListAdapter by lazy { ListAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListBinding.inflate(layoutInflater)
         return binding.root
-
 
     }
 
@@ -34,8 +41,12 @@ class ListFragment : Fragment() {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
+        setUpMenu()
+        setUpRv()
 
+    }
 
+    private fun setUpMenu() {
         val menuHost: MenuHost = requireActivity()
 
         menuHost.addMenuProvider(object : MenuProvider {
@@ -50,7 +61,35 @@ class ListFragment : Fragment() {
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
+
+    private fun populateRv() {
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner) { data ->
+
+            if (data.isNotEmpty()) {
+                adapter.differ.submitList(data)
+            } else {
+                binding.noDataImageView.visibility = View.VISIBLE
+                binding.noDataTextView.visibility = View.VISIBLE
+                binding.noDataGuide.visibility = View.VISIBLE
+                binding.noDataGuideArrow.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setUpRv() {
+        recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        populateRv()
+        adapter.setOnItemClickListener(object : OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                val currentItem = adapter.differ.currentList[position]
+                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
+                findNavController().navigate(action)
+            }
+        })
     }
 
 }
