@@ -1,6 +1,7 @@
 package com.abe.todolist.fragments.update
 
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,6 +15,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -23,7 +25,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.abe.todolist.R
 import com.abe.todolist.TimePickerFragment
-import com.abe.todolist.data.models.Priority
 import com.abe.todolist.data.models.ToDoData
 import com.abe.todolist.data.viewmodel.ToDoViewModel
 import com.abe.todolist.databinding.FragmentUpdateBinding
@@ -41,7 +42,7 @@ class UpdateFragment : Fragment() {
     private val args by navArgs<UpdateFragmentArgs>()
 
     private val mSharedViewModel: SharedViewModel by viewModels()
-    private val mTodoViewModel :ToDoViewModel by viewModels()
+    private val mTodoViewModel: ToDoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +76,7 @@ class UpdateFragment : Fragment() {
             requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
     private fun scheduleNotification() {
         val intent = Intent(requireContext().applicationContext, Notifications::class.java)
         val title = binding.currentTitleEt.text.toString()
@@ -102,15 +104,16 @@ class UpdateFragment : Fragment() {
         binding.apply {
             currentTitleEt.setText(args.currentitem.title)
             currentDescriptionEt.setText(args.currentitem.description)
-            currentPrioritiesSpinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentitem.priority ))
-            currentPrioritiesSpinner.onItemSelectedListener = mSharedViewModel.onItemSelectedListener
+            currentPrioritiesSpinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentitem.priority))
+            currentPrioritiesSpinner.onItemSelectedListener =
+                mSharedViewModel.onItemSelectedListener
             tvTime.text = args.currentitem.time
             tvDate.text = args.currentitem.date
 
         }
     }
 
-    private fun setUpMenu(){
+    private fun setUpMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -121,10 +124,34 @@ class UpdateFragment : Fragment() {
                 when (menuItem.itemId) {
                     android.R.id.home -> requireActivity().onBackPressedDispatcher.onBackPressed()
                     R.id.menu_save -> updateItem()
+                    R.id.menu_delete -> deleteItem()
                 }
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun deleteItem() {
+        confirmRemoval {
+            if (it){
+                mTodoViewModel.deleteItem(args.currentitem)
+                findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+                Toast.makeText(requireContext(),"Removed!",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun confirmRemoval(callback: (confirmed: Boolean) -> Unit) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes") { _, _ ->
+            callback(true)
+        }
+        builder.setNegativeButton("No") { _, _ ->
+            callback(false)
+        }
+        builder.setTitle("Delete '${args.currentitem.title}'?")
+        builder.setMessage("Are you sure you want to remove '${args.currentitem.title}'?")
+        builder.create().show()
     }
 
     private fun updateItem() {
@@ -135,7 +162,7 @@ class UpdateFragment : Fragment() {
             val time = tvTime.text.toString()
             val date = tvDate.text.toString()
 
-            if (mSharedViewModel.verifyDataFromUser(title,description,date,time)){
+            if (mSharedViewModel.verifyDataFromUser(title, description, date, time)) {
                 val updateItem = ToDoData(
                     args.currentitem.id,
                     title,
@@ -152,7 +179,7 @@ class UpdateFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
                 findNavController().navigate(R.id.action_updateFragment_to_listFragment)
-            }else{
+            } else {
                 Toast.makeText(
                     requireContext(),
                     "fill all the fields (Date and time included)",

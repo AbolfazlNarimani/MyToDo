@@ -1,5 +1,6 @@
 package com.abe.todolist.fragments.list
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -18,10 +19,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abe.todolist.R
 import com.abe.todolist.data.viewmodel.ToDoViewModel
 import com.abe.todolist.databinding.FragmentListBinding
+import com.abe.todolist.fragments.SharedViewModel
 
 class ListFragment : Fragment() {
 
     private val mToDoViewModel: ToDoViewModel by viewModels()
+    private val mSharedViewModel: SharedViewModel by viewModels()
     private lateinit var binding: FragmentListBinding
     private lateinit var recyclerView: RecyclerView
     private val adapter: ListAdapter by lazy { ListAdapter() }
@@ -58,24 +61,59 @@ class ListFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     android.R.id.home -> requireActivity().onBackPressedDispatcher.onBackPressed()
+                    R.id.menu_delete_all -> deleteAll()
                 }
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-
-    fun populateRv() {
-        mToDoViewModel.getAllData.observe(viewLifecycleOwner) { data ->
-
-            if (data.isNotEmpty()) {
-                adapter.differ.submitList(data)
-            } else {
-                this.binding.noDataImageView.visibility = View.VISIBLE
-                this.binding.noDataTextView.visibility = View.VISIBLE
-                this.binding.noDataGuide.visibility = View.VISIBLE
-                this.binding.noDataGuideArrow.visibility = View.VISIBLE
+    private fun deleteAll() {
+        confirmRemoval {
+            if (it) {
+                mToDoViewModel.deleteAll()
+                adapter.differ.submitList(emptyList())
+                emptyDatabaseViewsSwitch(true)
             }
+        }
+    }
+
+    private fun confirmRemoval(callback: (confirmed: Boolean) -> Unit) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes") { _, _ ->
+            callback(true)
+        }
+        builder.setNegativeButton("No") { _, _ ->
+            callback(false)
+        }
+        builder.setTitle("Delete \"ALL\"?")
+        builder.setMessage("Are you sure you want to remove everything ?")
+        builder.create().show()
+    }
+
+
+    private fun populateRv() {
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner) { data ->
+            mSharedViewModel.checkIfDatabaseEmpty(data)
+            adapter.differ.submitList(data)
+        }
+
+        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner){
+            emptyDatabaseViewsSwitch(it)
+        }
+    }
+
+    private fun emptyDatabaseViewsSwitch(isEmpty:Boolean) {
+        if (isEmpty){
+            binding.noDataImageView.visibility = View.VISIBLE
+            binding.noDataTextView.visibility = View.VISIBLE
+            binding.noDataGuide.visibility = View.VISIBLE
+            binding.noDataGuideArrow.visibility = View.VISIBLE
+        }else{
+            binding.noDataImageView.visibility = View.INVISIBLE
+            binding.noDataTextView.visibility = View.INVISIBLE
+            binding.noDataGuide.visibility = View.INVISIBLE
+            binding.noDataGuideArrow.visibility = View.INVISIBLE
         }
     }
 

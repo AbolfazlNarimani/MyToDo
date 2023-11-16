@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.abe.todolist.R
 import com.abe.todolist.data.models.Priority
+import com.abe.todolist.data.models.ToDoData
 import com.abe.todolist.interfacepack.DateSelected
 import com.abe.todolist.interfacepack.TimeSelected
 import java.text.SimpleDateFormat
@@ -22,6 +23,11 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
 
     /** ============================= List Fragment ============================= */
 
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    fun checkIfDatabaseEmpty(toDoData: List<ToDoData>){
+        emptyDatabase.value = toDoData.isEmpty()
+    }
 
     /** ============================= Add/Update Fragment ============================= */
 
