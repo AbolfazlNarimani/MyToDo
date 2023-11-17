@@ -48,6 +48,8 @@ class UpdateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentUpdateBinding.inflate(inflater)
+        binding.lifecycleOwner = this
+        binding.args = this.args
         return binding.root
     }
 
@@ -100,16 +102,16 @@ class UpdateFragment : Fragment() {
     }
 
     private fun populateFields() {
-        binding.apply {
+        /*binding.apply {
             currentTitleEt.setText(args.currentitem.title)
             currentDescriptionEt.setText(args.currentitem.description)
             currentPrioritiesSpinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentitem.priority))
-            currentPrioritiesSpinner.onItemSelectedListener =
-                mSharedViewModel.onItemSelectedListener
+
             tvTime.text = args.currentitem.time
             tvDate.text = args.currentitem.date
-
-        }
+        }*/
+        binding.currentPrioritiesSpinner.onItemSelectedListener =
+                mSharedViewModel.onItemSelectedListener
     }
 
     private fun setUpMenu() {
@@ -162,15 +164,19 @@ class UpdateFragment : Fragment() {
             val date = tvDate.text.toString()
 
             if (mSharedViewModel.verifyDataFromUser(title, description, date, time)) {
-                val updateItem = ToDoData(
-                    args.currentitem.id,
-                    title,
-                    mSharedViewModel.parsePriority(priority),
-                    description,
-                    date,
-                    time
-                )
-                mTodoViewModel.updateData(updateItem)
+                val updateItem = args?.currentitem?.let {
+                    ToDoData(
+                        it.id,
+                        title,
+                        mSharedViewModel.parsePriority(priority),
+                        description,
+                        date,
+                        time
+                    )
+                }
+                if (updateItem != null) {
+                    mTodoViewModel.updateData(updateItem)
+                }
                 scheduleNotification()
                 Toast.makeText(
                     requireContext(),

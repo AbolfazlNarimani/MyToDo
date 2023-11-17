@@ -43,6 +43,10 @@ android {
     kapt {
         correctErrorTypes = true
     }
+    // working with args ? add this (NOT OPTIONAL BLYAD)
+    sourceSets {
+        getByName("main").java.srcDirs("build/generated/source/navigation-args")
+    }
 }
 
 dependencies {

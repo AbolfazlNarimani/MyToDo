@@ -2,11 +2,13 @@ package com.abe.todolist.fragments.databindingadapters
 
 import android.text.BoringLayout
 import android.view.View
+import android.widget.Spinner
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import com.abe.todolist.R
 import com.abe.todolist.data.ToDoDatabase
+import com.abe.todolist.data.models.Priority
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BindingAdapters {
@@ -33,6 +35,14 @@ class BindingAdapters {
             }
         }
 
-
+        @BindingAdapter("android:parsePriorityToInt")
+        @JvmStatic
+        fun parsePriorityToInt(view: Spinner, priority: Priority){
+             when (priority) {
+                Priority.HIGH -> {view.setSelection(0)}
+                Priority.MEDIUM -> {view.setSelection(1)}
+                Priority.LOW -> {view.setSelection(2)}
+            }
+        }
     }
 }
