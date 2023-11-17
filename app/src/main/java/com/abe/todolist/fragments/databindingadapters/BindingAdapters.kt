@@ -32,5 +32,7 @@ class BindingAdapters {
                 else -> {}
             }
         }
+
+
     }
 }
