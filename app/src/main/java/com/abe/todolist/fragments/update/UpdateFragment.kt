@@ -15,7 +15,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -24,11 +23,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.abe.todolist.R
-import com.abe.todolist.TimePickerFragment
+import com.abe.todolist.fragments.DateAndTime.TimePickerFragment
 import com.abe.todolist.data.models.ToDoData
 import com.abe.todolist.data.viewmodel.ToDoViewModel
 import com.abe.todolist.databinding.FragmentUpdateBinding
-import com.abe.todolist.fragments.DatePickerFragment
+import com.abe.todolist.fragments.DateAndTime.DatePickerFragment
 import com.abe.todolist.fragments.SharedViewModel
 import com.abe.todolist.notifications.CHANNELID
 import com.abe.todolist.notifications.MESSEAGEEXTRA

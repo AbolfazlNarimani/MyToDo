@@ -33,17 +33,15 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         this.binding = FragmentListBinding.inflate(inflater)
-
+        binding.lifecycleOwner = this
+        binding.mSharedViewModel = this.mSharedViewModel
         return this.binding.root
+
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        this.binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
-        }
 
         setUpMenu()
         setUpRv()
@@ -73,7 +71,6 @@ class ListFragment : Fragment() {
             if (it) {
                 mToDoViewModel.deleteAll()
                 adapter.differ.submitList(emptyList())
-                emptyDatabaseViewsSwitch(true)
             }
         }
     }
@@ -91,29 +88,12 @@ class ListFragment : Fragment() {
         builder.create().show()
     }
 
-
     private fun populateRv() {
         mToDoViewModel.getAllData.observe(viewLifecycleOwner) { data ->
             mSharedViewModel.checkIfDatabaseEmpty(data)
-            adapter.differ.submitList(data)
-        }
-
-        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner){
-            emptyDatabaseViewsSwitch(it)
-        }
-    }
-
-    private fun emptyDatabaseViewsSwitch(isEmpty:Boolean) {
-        if (isEmpty){
-            binding.noDataImageView.visibility = View.VISIBLE
-            binding.noDataTextView.visibility = View.VISIBLE
-            binding.noDataGuide.visibility = View.VISIBLE
-            binding.noDataGuideArrow.visibility = View.VISIBLE
-        }else{
-            binding.noDataImageView.visibility = View.INVISIBLE
-            binding.noDataTextView.visibility = View.INVISIBLE
-            binding.noDataGuide.visibility = View.INVISIBLE
-            binding.noDataGuideArrow.visibility = View.INVISIBLE
+            data?.let {
+                adapter.differ.submitList(it)
+            }
         }
     }
 
