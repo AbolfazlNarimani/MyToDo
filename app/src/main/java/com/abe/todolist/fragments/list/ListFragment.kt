@@ -102,13 +102,6 @@ class ListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         populateRv()
-        adapter.setOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val currentItem = adapter.differ.currentList[position]
-                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
-                findNavController().navigate(action)
-            }
-        })
     }
 
 }
