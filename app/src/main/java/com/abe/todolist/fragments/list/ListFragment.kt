@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
@@ -15,9 +16,11 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.abe.todolist.R
 import com.abe.todolist.data.models.ToDoData
 import com.abe.todolist.data.viewmodel.ToDoViewModel
@@ -69,8 +72,25 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 when (menuItem.itemId) {
                     android.R.id.home -> requireActivity().onBackPressedDispatcher.onBackPressed()
                     R.id.menu_delete_all -> deleteAll()
+                    R.id.menu_priority_high -> {
+                        mToDoViewModel.sortByHighPriority.observe(viewLifecycleOwner) {
+                            adapter.differ.submitList(it)
+                        }
+                    }
 
+                    R.id.menu_priority_medium -> {
+                        mToDoViewModel.sortByMediumPriority.observe(viewLifecycleOwner) {
+                            adapter.differ.submitList(it)
+                        }
+                    }
+
+                    R.id.menu_priority_low -> {
+                        mToDoViewModel.SortByLowPriority.observe(viewLifecycleOwner) {
+                            adapter.differ.submitList(it)
+                        }
+                    }
                 }
+
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -111,7 +131,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setUpRv() {
         recyclerView = this.binding.recyclerView
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         populateRv()
         // swipe to delete
         swipeToDelete(recyclerView)
@@ -127,37 +148,45 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                     "${deletedItem.title} is Deleted!",
                     Toast.LENGTH_SHORT
                 ).show()
-                restoreDeletedData(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
+                restoreDeletedData(
+                    viewHolder.itemView,
+                    deletedItem,
+                    viewHolder.adapterPosition
+                )
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun restoreDeletedData(view: View, deletedItem: ToDoData, position: Int) {
+    private fun restoreDeletedData(
+        view: View,
+        deletedItem: ToDoData,
+        position: Int
+    ) {
         val snackbar = Snackbar.make(view, "Deleted ${deletedItem.title}", Snackbar.LENGTH_LONG)
-            .setAction("undo"){
+            .setAction("undo") {
                 mToDoViewModel.insertData(deletedItem)
             }.show()
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-       if (query != null){
-           searchThroughDatabase(query)
-       }
+        if (query != null) {
+            searchThroughDatabase(query)
+        }
         return true
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        if (query != null){
+        if (query != null) {
             searchThroughDatabase(query)
         }
         return true
     }
 
     private fun searchThroughDatabase(query: String) {
-        val searchQuery ="%$query%"
-        mToDoViewModel.searchDatabase(searchQuery).observe(this){list ->
+        val searchQuery = "%$query%"
+        mToDoViewModel.searchDatabase(searchQuery).observe(this) { list ->
             list?.let {
                 adapter.differ.submitList(it)
             }
