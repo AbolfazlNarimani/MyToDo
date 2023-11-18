@@ -1,4 +1,4 @@
-package com.abe.todolist.fragments.list
+package com.abe.todolist.fragments.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,7 +19,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
             binding.executePendingBindings()
         }
         companion object{
-            fun from(parent: ViewGroup):MyViewHolder{
+            fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = RowLayoutBinding.inflate(layoutInflater, parent, false)
                 return MyViewHolder(binding)
