@@ -75,18 +75,21 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                     R.id.menu_priority_high -> {
                         mToDoViewModel.sortByHighPriority.observe(viewLifecycleOwner) {
                             adapter.differ.submitList(it)
+                            recyclerView.scheduleLayoutAnimation()
                         }
                     }
 
                     R.id.menu_priority_medium -> {
                         mToDoViewModel.sortByMediumPriority.observe(viewLifecycleOwner) {
                             adapter.differ.submitList(it)
+                            recyclerView.scheduleLayoutAnimation()
                         }
                     }
 
                     R.id.menu_priority_low -> {
                         mToDoViewModel.SortByLowPriority.observe(viewLifecycleOwner) {
                             adapter.differ.submitList(it)
+                            recyclerView.scheduleLayoutAnimation()
                         }
                     }
                 }
@@ -124,6 +127,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             mSharedViewModel.checkIfDatabaseEmpty(data)
             data?.let {
                 adapter.differ.submitList(it)
+                recyclerView.scheduleLayoutAnimation()
             }
         }
     }
@@ -134,6 +138,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         populateRv()
+        recyclerView.scheduleLayoutAnimation()
         // swipe to delete
         swipeToDelete(recyclerView)
     }
@@ -189,6 +194,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         mToDoViewModel.searchDatabase(searchQuery).observe(this) { list ->
             list?.let {
                 adapter.differ.submitList(it)
+                recyclerView.scheduleLayoutAnimation()
             }
         }
     }

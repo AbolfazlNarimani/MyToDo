@@ -145,7 +145,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application),
     }
 
 
-    // observers DAAAA
+    // observers
     fun observeDateReceiver(): MutableLiveData<String> {
         return _datePickerLiveData
     }
