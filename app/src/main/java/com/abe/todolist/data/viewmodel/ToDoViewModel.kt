@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import androidx.room.Query
 import com.abe.todolist.data.ToDoDatabase
 import com.abe.todolist.data.models.ToDoData
 import com.abe.todolist.data.repository.ToDoRepository
@@ -42,5 +43,8 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun searchDatabase(searchQuery: String): LiveData<List<ToDoData>>{
+        return repository.searchDatabase(searchQuery)
+    }
 
 }

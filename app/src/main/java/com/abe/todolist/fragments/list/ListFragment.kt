@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -25,7 +26,7 @@ import com.abe.todolist.fragments.SharedViewModel
 import com.abe.todolist.fragments.list.adapter.ListAdapter
 import com.google.android.material.snackbar.Snackbar
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
@@ -58,16 +59,22 @@ class ListFragment : Fragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.list_fragment_menu, menu)
+                val search = menu.findItem(R.id.menu_search)
+                val searchView = search.actionView as? SearchView
+                searchView?.isSubmitButtonEnabled = true
+                searchView?.setOnQueryTextListener(this@ListFragment)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     android.R.id.home -> requireActivity().onBackPressedDispatcher.onBackPressed()
                     R.id.menu_delete_all -> deleteAll()
+
                 }
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
     }
 
     private fun deleteAll() {
@@ -134,5 +141,27 @@ class ListFragment : Fragment() {
             }.show()
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+       if (query != null){
+           searchThroughDatabase(query)
+       }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null){
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+    private fun searchThroughDatabase(query: String) {
+        val searchQuery ="%$query%"
+        mToDoViewModel.searchDatabase(searchQuery).observe(this){list ->
+            list?.let {
+                adapter.differ.submitList(it)
+            }
+        }
+    }
 
 }

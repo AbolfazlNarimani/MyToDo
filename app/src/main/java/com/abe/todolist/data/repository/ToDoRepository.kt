@@ -1,6 +1,7 @@
 package com.abe.todolist.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.room.Query
 import com.abe.todolist.data.ToDoDao
 import com.abe.todolist.data.models.ToDoData
 
@@ -22,6 +23,10 @@ class ToDoRepository(private val toDoDao: ToDoDao) {
 
     suspend fun deleteItem(toDoData: ToDoData) {
         toDoDao.deleteItem(toDoData)
+    }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<ToDoData>>{
+        return toDoDao.searchDatabase(searchQuery)
     }
 
 
